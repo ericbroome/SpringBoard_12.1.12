@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>OO Challenge - SpringBoard 12.1.12</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- Jasmine -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.3.0/jasmine.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.3.0/jasmine.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.3.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/3.3.0/boot.js"></script>
+    <!-- highlight.js -->    
+    <link rel="stylesheet" href="highlight/highlight.css">
+    <script src="highlight/highlight.js"></script>
+    <!-- Local styles-->
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div style="display:grid; grid-template-columns: 33.3% 33.3% auto; grid-template-rows: auto; width: 100%">
+        <div class="header-cell button"><a href="#Testing">Jasmine Tests</a></div>
+        <div class="header-cell button"><a href="https://highlightjs.org/" target="_blank">Highlight.js</a></div>
+        <div class="header-cell button"><a href="https://github.com/ericbroome/SpringBoard_12.1.12" target="_blank">GitHub Source</a></div>
+      </div>
+      <hr />
+      <div class="question">
+        <h3>Part One - Create a class for vehicle.</h3>
+        <pre>
+            <code class="javascript mini-code">
+class Vehicle {
+    constructor(make, model, year) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    }
+    //Return "Beep."
+    honk = function() {
+        return "Beep.";
+    }
+    //Return the make, model and year
+    toString = function() {
+        return `Make: ${this.make} Model: ${this.model} Year: ${this.year}`;
+    }
+}
+            </code>
+        </pre>
+      </div>
+      <div class="question">
+        <h3>Part Two - Create a derived class "Car" with a property "numWheels" equal to 4</h3>
+        <pre>
+            <code class="javascript mini-code">
+class Car extends Vehicle {
+    constructor(make, model, year) {
+        super(make, model, year);
+        this.numWheels = 4;
+    }
+}
+          </code>
+        </pre>
+      </div>
+      <div class="question">
+        <h3>Part Three - Create a derived class "Motorcycle" with a property "numWheels" equal to 2</h3>
+        <pre>
+            <code class="javascript mini-code">
+class Motorcycle extends Vehicle {
+    constructor(make, model, year) {
+        super(make, model, year);
+        this.numWheels = 2;
+    }
+    //When invoked, return "VROOM!!!"
+    revEngine = function() {
+        return "VROOM!!!";
+    }
+}
+            </code>
+        </pre>
+      </div>
+      <div class="question">
+        <h3>Part Four - Create a class "Garage" with a property "vehicles" which stores an array of objects derived from Vehicle</h3>
+        <pre>
+            <code class="javascript mini-code">
+class Garage {
+    constructor(capacity) {
+        this.vehicles = [];
+        this.capacity = capacity;
+    }
+    //Add a Vehicle-derived object and ensure that it is actually derived from Vehicle
+    add(vehicle) {
+        if (!(vehicle instanceof Vehicle)) {
+            return "Only vehicles are allowed in here!";
+        }   
+        if (this.vehicles.length >= this.capacity) {
+            return "Sorry, we're full.";
+        }
+        this.vehicles.push(vehicle);
+        return "Vehicle added!";
+    }
+}
+            </code>
+        </pre>
+      </div>
+      <h2>test.js</h2>
+      <div class="code-block">
+        <pre>
+          <code id="theTest" class="javascript">
+describe("Vehicle Class", () => {
+    it("Creates a class having properties make, model and year and a method honk()", () => {
+        const vehicle = new Vehicle("Dodge", "Journey", 2015);
+        expect(vehicle.hasOwnProperty("make")).toEqual(true);
+        expect(vehicle.hasOwnProperty("model")).toEqual(true);
+        expect(vehicle.hasOwnProperty("year")).toEqual(true);
+        expect(vehicle.hasOwnProperty("honk")).toEqual(true);
+        expect(vehicle.make).toEqual("Dodge");
+        expect(vehicle.model).toEqual("Journey");
+        expect(vehicle.year).toEqual(2015);
+        expect(vehicle.honk()).toEqual("Beep.");
+    });
+});
+
+describe("Car Class", () => {
+    it("Creates a class derived from Vehicle having addition properties numWheels = 4", () => {
+        const car = new Car("Toyota", "Celica", 1973);
+        let x = car.hasOwnProperty("numWheels");
+        expect(car.hasOwnProperty("numWheels")).toEqual(true);
+        expect(car.make).toEqual("Toyota");
+        expect(car.model).toEqual("Celica");
+        expect(car.year).toEqual(1973);
+        expect(car.numWheels).toEqual(4);
+    });
+});
+
+describe("Motorcycle Class", () => {
+    it("Creates a class derived from Vehicle having addition properties numWheels = 2 and a method revEngine()", () => {
+        const motorcycle = new Motorcycle("Kawasaki", "Ninja", 2019);
+        expect(motorcycle.hasOwnProperty("numWheels")).toEqual(true);
+        expect(motorcycle.hasOwnProperty("revEngine")).toEqual(true);
+        expect(motorcycle.make).toEqual("Kawasaki");
+        expect(motorcycle.model).toEqual("Ninja");
+        expect(motorcycle.year).toEqual(2019);
+        expect(motorcycle.numWheels).toEqual(2);
+        expect(motorcycle.revEngine()).toEqual("VROOM!!!");
+    });
+});
+
+describe("Garage Class", () => {
+    it("Creates a class Garage which can hold a number of vehicles and only allows instances of objects derived from Vehicle", () => {
+        const garage = new Garage(1);
+        const vehicle1 = new Motorcycle("Kawasaki", "Ninja", 2019);
+        expect(garage.hasOwnProperty("vehicles")).toEqual(true);
+        expect(garage.hasOwnProperty("add")).toEqual(true);
+        expect(garage.add(vehicle1)).toEqual("Vehicle added!");
+        expect(garage.add(vehicle1)).toEqual("Sorry, we're full.");
+        expect(garage.add("taco")).toEqual("Only vehicles are allowed in here!");
+    });
+});
+            </code>
+        </pre>
+        </div>
+        <hr />
+        <h2>Jasmine Testing</h2>
+        <a name="Testing"></a>
+    
+    <script src="script.js"></script>
+    <script src="test.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>
